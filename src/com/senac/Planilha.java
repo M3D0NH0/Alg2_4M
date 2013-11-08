@@ -22,42 +22,64 @@ public class Planilha {
 
 		while(sc.hasNext()){
 			if(sc.hasNextInt()){
-				saida += sc.nextInt() + " ";
+				saida += " " + sc.nextInt();
 
 			}else if(sc.hasNext()){
 				entrada = sc.next();
-				
 
 				/*	2.3.1. Se for o operador ")", desempilhar ate que o operador "(" seja o operador "desempilhado";
 a cada operador desempilhado, enviar para a saida (com excecao do "(").*/
-				if(pilha1.peek() == ")"){
-					while(entrada != "("){
-						saida += " "+ pilha1.peek();
-					}
+
+				if(!pilha1.isEmpty() && entrada == ")"){
+
+					do{
+						saida += " "+ pilha1.pop();
+
+					}while(pilha1.peek() != "(");
 				}
+
 				/*	2.3.2. Senao, se o operador tiver prioridade MAIOR que o operador do topo da pilha, ou se a pilha
 estiver vazia, ou o operador do topo da pilha for "(", empilhar o operador.*/
+
 				else if(pilha1.isEmpty() || 
-						pilha1.peek() == "(" || 
-						prioridade(pilha1.peek()) > prioridade(pilha1.pop())){
+						prioridade(entrada) > prioridade(pilha1.peek())||
+						pilha1.peek() == "(" 
+						){
+
 					pilha1.push(entrada);
+					
+
 				}
 				/*2.3.3. Senao, dempilhar (enviando para a saida) os operadores da pilha ate que o operador tenha
 prioridade MAIOR que o operador do topo, ou que o operador do topo da pilha seja "(",
 ou que a pilha esteja vazia. Empilhar o operador.
 				 */
 				else{
-					do{
-						//saida += " " + pilha1.pop();
 
-					}while(!(prioridade(entrada) > prioridade(pilha1.peek())) ||
-							!(pilha1.peek() == "(")||
-							!pilha1.isEmpty());
+					do{				
+						String tempA = pilha1.pop();
+
+						if(!tempA.equals("(") && !tempA.equals(")")){
+
+							saida += " " + tempA;
+						}
+
+						pilha1.push(entrada);
+
+					}while(pilha1.isEmpty()||
+							(prioridade(entrada) > prioridade(pilha1.peek())) ||
+							(pilha1.peek() == "("));
+
+					pilha1.push(entrada);
+
 				}
-			}
-			//saida += " "+ pilha1.pop();
-		}
 
+			}
+
+			out.println(saida);
+			out.println("Entrada: "+entrada);
+		}
+		
 		out.println(saida);
 		out.println(pilha1);
 		out.println(entrada);
